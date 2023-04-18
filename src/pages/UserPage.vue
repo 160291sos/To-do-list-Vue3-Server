@@ -21,7 +21,7 @@
             <button class="userBtn">
                 <img src="@/components/icon/pen.svg" width="24" height="24"/>
             </button>
-            <button @click="toTrush" class="userBtn">  
+            <button @click="toTrush(task)" class="userBtn">  
                 <img src="@/components/icon/trash.svg"/>
             </button>
         </table-column>
@@ -80,14 +80,18 @@
         removeEditColumn(){
             this.edit=false;
         },
-        toTrush(){
+        toTrush(task){
+            axios.delete(`http://localhost:8089/api/tasks?taskId=${task.taskId}`)
+             .then((response) => {
+                    this.tasks = this.tasks.filter(p => p.taskId !== task.taskId);
+                })
+                .catch((error => {
+                    console.log(error);
+                }))
             
+                
         },
         saveNewTask(newTask){
-            
-            newTask.user.id=this.id;
-            newTask.user.userGroup=this.tasks[0].user.userGroup;
-            this.tasks.push(newTask);
             this.edit=false;
             
             this.postBody.user.id = this.id;
@@ -97,26 +101,34 @@
            
             axios.post('http://localhost:8089/api/tasks', this.postBody)
                 .then((response) => {
-                    console.log(response);
+                    axios.get(`http://localhost:8089/api/tasks?userIds=${this.$route.query.id}`)
+                        .then(response => {
+                            this.tasks = response.data;
+                            
+                            })
+                        .catch((error => {
+                        console.log(error);
+                        }))
                 })
                 .catch((error => {
                     console.log(error);
                 }))
         }
       },
+      updateData(){
+        axios.get(`http://localhost:8089/api/tasks?userIds=${this.$route.query.id}`)
+            .then(response => {
+                this.tasks = response.data;
+                            
+                })
+            .catch((error => {
+                console.log(error);
+            }))
+      },
        mounted: function (){
         const id = this.$route.query.id;
             this.id=id;
-        // try {
-        //      axios.get(`http://localhost:8089/api/tasks?userIds=${id}`)
-        //     .then(response => {
-        //         this.tasks = response.data;
-        //         console.log(this.tasks)
-        //     })
-            
-        // }catch (e) {
-        //     console.log(e)
-        // }
+
         function getUserData() {
             return axios.get(`http://localhost:8089/api/tasks?userIds=${id}`)
         }

@@ -4,10 +4,19 @@
     </div>
     <div>
         <div v-for="name in userData">
-            <my-button   @click="$router.push({name: 'userId', params:{id: name.id}, query:{id:name.id}}), getUserData(name)" >{{name.name}}</my-button>
+            <my-button   
+            @click="$router.push({name: 'userId', query:{id:name.id}}), 
+            getUserData(name)" 
+            >
+            {{name.name}}
+            </my-button>
         </div>
         
-        <my-button class="btn btn_create" @click="$router.push('/new')">+</my-button>
+        <my-button class="btn btn_create" 
+        @click="$router.push('/new')"
+        >
+        +
+        </my-button>
     </div>
 </template>
 
