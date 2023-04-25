@@ -6,19 +6,42 @@
         v-for="task in tasks"
         :key="task.taskId">
         <table-column>
-            {{ task.taskName }}
+            <my-input v-if="editOld && this.idEditTask == task.taskId"
+            :taskName="task.taskName"
+            v-model="task.taskName"> 
+            </my-input>
+            <slot v-else >{{ task.taskName }}</slot>
         </table-column>
         <table-column>
-            {{ task.taskPriority }}
+            <my-select v-if="editOld && this.idEditTask == task.taskId"
+                :listOfPrioritys="priorities"
+                :editPriority="task.taskPriority"
+                v-model="task.taskPriority"
+            ></my-select>
+            <slot v-else> {{ task.taskPriority }} </slot>
         </table-column>
         <table-column>
-            {{ task.date }}
+            <my-date v-if="editOld && this.idEditTask == task.taskId"
+            :taskDate="task.date"
+            v-model="task.date"
+            >
+
+            </my-date>
+            <slot v-else>{{ task.date }}</slot>
         </table-column>
         <table-column>
             {{ task.user.name }}
         </table-column>
         <table-column>
-            <button class="userBtn">
+            <button 
+            v-if="editOld && this.idEditTask == task.taskId" 
+            class="userBtn"
+            @click="saveEditTask(task)">
+                <img  src="@/components/icon/savedisk.svg" width="20" height="20"/>
+            </button>
+            <button 
+            v-else @click="editTask(task.taskId)" 
+            class="userBtn">
                 <img src="@/components/icon/pen.svg" width="24" height="24"/>
             </button>
             <button @click="toTrush(task)" class="userBtn">  
@@ -46,26 +69,40 @@
   import TableRow from "@/components/Table/TableRow.vue";
   import TableColumn from "@/components/Table/TableColumn.vue";
   import MyButton from "@/components/UI/MyButton.vue";
-  import TableEditColumn from "@/components/Table/TableEditColumn.vue"
+  import TableEditColumn from "@/components/Table/TableEditColumn.vue";
+  import MySelect from "@/components/UI/MySelect.vue";
+  import MyInput from "@/components/UI/MyInput.vue";
+  import MyDate from "@/components/UI/MyDate.vue";
   import axios from "axios";
 
     export default {
-        components: {BaseTable, TableRow, TableColumn,MyButton, TableEditColumn },
+        components: {BaseTable, TableRow, TableColumn,MyButton, TableEditColumn, MySelect, MyInput, MyDate },
       data (){
         return {
             tableHeads: ['Task Name', 'Priority', 'Date', 'Owner', ''],
             tasks: [],
             priorities: [],
             edit: false,
+            editOld: false,
             id:'',
-            postBody: {
+            idEditTask: '',
+            newPostBody: {
                     user: {
                         id:''
                     },
                     taskName: '',
                     taskPriority: 'LOW',
                     date: ''
+            },
+            editPostBody: {
+                taskId:'',
+                user: {
+                    id:''
                 },
+                taskName:'',
+                taskPriority:'',
+                date:''
+            }
         }
       },
       props: {
@@ -76,6 +113,10 @@
       methods: {
         addNewTask (){
             this.edit=true;
+        },
+        editTask(taskId){
+            this.editOld=true;
+            this.idEditTask = taskId;
         },
         removeEditColumn(){
             this.edit=false;
@@ -94,12 +135,13 @@
         saveNewTask(newTask){
             this.edit=false;
             
-            this.postBody.user.id = this.id;
-            this.postBody.taskName = newTask.taskName;
-            this.postBody.taskPriority = newTask.taskPriority;
-            this.postBody.date=newTask.date;
+            this.newPostBody.user.id = this.id;
+            this.newPostBody.taskName = newTask.taskName;
+            this.newPostBody.taskPriority = newTask.taskPriority;
+            this.newPostBody.date=newTask.date;
+            console.log(this.newPostBody)
            
-            axios.post('http://localhost:8089/api/tasks', this.postBody)
+            axios.post('http://localhost:8089/api/tasks', this.newPostBody)
                 .then((response) => {
                     axios.get(`http://localhost:8089/api/tasks?userIds=${this.$route.query.id}`)
                         .then(response => {
@@ -113,7 +155,25 @@
                 .catch((error => {
                     console.log(error);
                 }))
-        }
+        },
+        saveEditTask(task){
+            this.editOld=false;
+
+            this.editPostBody.taskId=task.taskId;
+            this.editPostBody.user.id=this.id;
+            this.editPostBody.taskName=task.taskName;
+            this.editPostBody.taskPriority=task.taskPriority;
+            this.editPostBody.date=task.date;
+            console.log(task.taskPriority);
+
+            axios.put('http://localhost:8089/api/tasks', this.editPostBody)
+                .then((response) => {
+                    this.updateData
+                })
+                .catch((error => {
+                    console.log(error);
+                }))
+
       },
       updateData(){
         axios.get(`http://localhost:8089/api/tasks?userIds=${this.$route.query.id}`)
@@ -125,6 +185,9 @@
                 console.log(error);
             }))
       },
+      },
+      
+      
        mounted: function (){
         const id = this.$route.query.id;
             this.id=id;
@@ -150,6 +213,7 @@
     border: none;
     padding: 0px;
 }
+
 .addTask {
     border-radius:100%;
     border-color: gray;

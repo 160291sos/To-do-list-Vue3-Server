@@ -1,24 +1,29 @@
 <template>
 <table-row>
     <table-column>
-        <input
+        <my-input v-model="newTask.taskName"
+        >
+        </my-input>
+        <!-- <input
         v-model="newTask.taskName"
         @input="updateInput"
-        placeholder="Write your task..">
+        placeholder="Write your task.."> -->
     </table-column>
     <table-column>
         <my-select 
-        :listOfPrioritys="listOfPrioritys"
-        v-model="newTask.taskPriority"
+            :listOfPrioritys="listOfPrioritys"
+            v-model="newTask.taskPriority"
         ></my-select>
     </table-column>
     <table-column>
-        <input type="text"  
+        <my-date v-model="newTask.date">
+        </my-date>
+        <!-- <input type="text"  
         placeholder="Date... "
         onfocus="(this.type='date')"
         onblur="(this.type='text')"
         min="2023-04-01"
-        v-model="newTask.date">
+        v-model="newTask.date"> -->
 
     </table-column>
     <table-column
@@ -39,10 +44,12 @@
 <script>
 import TableRow from "@/components/Table/TableRow.vue";
 import TableColumn from "@/components/Table/TableColumn.vue";
-import MySelect from "@/components/UI/MySelect.vue"
+import MySelect from "@/components/UI/MySelect.vue";
+import MyInput from "../UI/MyInput.vue";
+import MyDate from "@/components/UI/MyDate.vue";
 
 export default {
-        components: {TableRow, TableColumn, MySelect },
+        components: {TableRow, TableColumn, MySelect, MyInput, MyDate },
         props: ['listOfPrioritys', 'userName'],
         data(){
             return {
@@ -60,7 +67,8 @@ export default {
             }
         },
         methods: {
-            updateInput(priorities){
+            updateInput(){
+                console.log(this.newTask.date);
             }
         }
 };

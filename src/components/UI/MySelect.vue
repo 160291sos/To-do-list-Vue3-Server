@@ -3,6 +3,7 @@
       <option disabled value="">Priority</option>
       <option
         v-for="prior in listOfPrioritys"
+        :selected="prior == editPriority"
         :key="prior"
         :value="prior"
       >
@@ -24,6 +25,9 @@
       },
       listOfPrioritys: {
         type: Array
+      },
+      editPriority:{
+        type: String
       }
     },
     methods: {
