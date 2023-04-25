@@ -52,7 +52,7 @@
     <table-editColumn 
     v-if="edit" 
     :listOfPrioritys="priorities"
-    :userName="tasks[0].user.name"
+    :userName="this.$route.query.name"
     @remove="removeEditColumn"
     @save="saveNewTask"
     ></table-editColumn>
