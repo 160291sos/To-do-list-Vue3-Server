@@ -1,4 +1,3 @@
-
 <template>
     <base-table 
         :head="tableHeads">
@@ -25,7 +24,6 @@
             :taskDate="task.date"
             v-model="task.date"
             >
-
             </my-date>
             <slot v-else>{{ task.date }}</slot>
         </table-column>
@@ -37,15 +35,15 @@
             v-if="editOld && this.idEditTask == task.taskId" 
             class="userBtn"
             @click="saveEditTask(task)">
-                <img  src="@/components/icon/savedisk.svg" width="20" height="20"/>
+                <slot>&#128190;</slot>
             </button>
             <button 
             v-else @click="editTask(task.taskId)" 
             class="userBtn">
-                <img src="@/components/icon/pen.svg" width="24" height="24"/>
+                <slot>&#9999;&#65039;</slot>
             </button>
             <button @click="toTrush(task)" class="userBtn">  
-                <img src="@/components/icon/trash.svg"/>
+               <slot>&#128465;&#65039;</slot> 
             </button>
         </table-column>
     </table-row>
@@ -56,10 +54,7 @@
     @remove="removeEditColumn"
     @save="saveNewTask"
     ></table-editColumn>
-    <button @click="addNewTask"
-    class="addTask">
-        <img src="@/components/icon/plus_icon.svg"/>
-    </button>
+    <my-button @click="addNewTask" class="addTask">+</my-button>
     </base-table>
   </template>
   
@@ -68,15 +63,11 @@
   import BaseTable from "@/components/Table/BaseTabel.vue";
   import TableRow from "@/components/Table/TableRow.vue";
   import TableColumn from "@/components/Table/TableColumn.vue";
-  import MyButton from "@/components/UI/MyButton.vue";
   import TableEditColumn from "@/components/Table/TableEditColumn.vue";
-  import MySelect from "@/components/UI/MySelect.vue";
-  import MyInput from "@/components/UI/MyInput.vue";
-  import MyDate from "@/components/UI/MyDate.vue";
   import axios from "axios";
 
     export default {
-        components: {BaseTable, TableRow, TableColumn,MyButton, TableEditColumn, MySelect, MyInput, MyDate },
+        components: {BaseTable, TableRow, TableColumn, TableEditColumn},
       data (){
         return {
             tableHeads: ['Task Name', 'Priority', 'Date', 'Owner', ''],
@@ -164,7 +155,6 @@
             this.editPostBody.taskName=task.taskName;
             this.editPostBody.taskPriority=task.taskPriority;
             this.editPostBody.date=task.date;
-            console.log(task.taskPriority);
 
             axios.put('http://localhost:8089/api/tasks', this.editPostBody)
                 .then((response) => {
@@ -209,19 +199,30 @@
   </script>
 
 <style scoped>
+* {
+    margin: auto;
+}
 .userBtn{
     border: none;
     padding: 0px;
+    padding: 5px;
+    background-color: white;
+
 }
+
 
 .addTask {
     border-radius:100%;
-    border-color: gray;
-    padding:10px;
     background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items:center;
-    margin: 10px;
+    color: teal;
+    width: 50px;
+    height: 50px;
+    font-size: 25px;
+    margin-left: 10px;
+    padding: 0 15px;
+}
+.addTask:hover {
+    background-color: teal;
+    color: white;
 }
 </style>

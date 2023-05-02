@@ -5,6 +5,7 @@
     <div>
         <div v-for="name in userData">
             <my-button   
+            class="btnUser"
             @click="$router.push({name: 'userId', query:{id:name.id, name:name.name}}), 
             getUserData(name)" 
             >
@@ -13,7 +14,7 @@
         </div>
         <my-button class="btnNewUser" v-if="newUser">
             <input type="text" v-model="newUserData.name">
-            <button class="btnNewUser" @click="saveNewUser">&#10003;</button>
+            <button class="btnNewUser" @click="saveNewUser" >&#10003;</button>
             <button class="btnNewUser" @click="deleteNewUser">X</button>
         </my-button>
         <my-button class="btn btn_create" 
@@ -95,5 +96,8 @@ input {
     border: none;
     background-color: white;
     color: teal;
+}
+.btnUser {
+    width: 250px;
 }
 </style>

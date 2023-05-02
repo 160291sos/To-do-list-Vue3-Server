@@ -1,13 +1,9 @@
 <template>
 <table-row>
     <table-column>
-        <my-input v-model="newTask.taskName"
+        <my-input v-focus v-model="newTask.taskName"
         >
         </my-input>
-        <!-- <input
-        v-model="newTask.taskName"
-        @input="updateInput"
-        placeholder="Write your task.."> -->
     </table-column>
     <table-column>
         <my-select 
@@ -18,12 +14,6 @@
     <table-column>
         <my-date v-model="newTask.date">
         </my-date>
-        <!-- <input type="text"  
-        placeholder="Date... "
-        onfocus="(this.type='date')"
-        onblur="(this.type='text')"
-        min="2023-04-01"
-        v-model="newTask.date"> -->
 
     </table-column>
     <table-column
@@ -31,12 +21,12 @@
         {{ userName }}
     </table-column>
     <table-column>
-        <button class="Btn">
-                <img @click="$emit('save',newTask)" src="@/components/icon/savedisk.svg" width="20" height="20"/>
+        <button @click="$emit('save', newTask)" class="Btn">
+            <slot>&#128190;</slot>
         </button>
         <button @click="$emit('remove')" class="Btn">
-                <img src="@/components/icon/cancel_circle.svg" width="26" height="26"/>
-            </button>
+            <slot>&#10060;</slot>
+        </button>
     </table-column>
 </table-row>
 </template>
@@ -44,12 +34,8 @@
 <script>
 import TableRow from "@/components/Table/TableRow.vue";
 import TableColumn from "@/components/Table/TableColumn.vue";
-import MySelect from "@/components/UI/MySelect.vue";
-import MyInput from "../UI/MyInput.vue";
-import MyDate from "@/components/UI/MyDate.vue";
-
 export default {
-        components: {TableRow, TableColumn, MySelect, MyInput, MyDate },
+        components: {TableRow, TableColumn},
         props: ['listOfPrioritys', 'userName'],
         data(){
             return {
@@ -76,15 +62,11 @@ export default {
 </script>
 
 <style scoped>
-.userBtn{
-    border: none;
-    display: flex;
-}
+
 .Btn{
-    padding: 0px;
-    margin: 0px;
+    padding: 5px;
     border: none;
-    padding-right: 5px;
+    background-color: white;
 }
 input{
     border: none;

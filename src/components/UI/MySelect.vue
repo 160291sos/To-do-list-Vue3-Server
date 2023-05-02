@@ -41,7 +41,7 @@
   <style scoped>
   select {
     border: none;
-    margin-left: -10px;
+    margin-left: -5px;
   }
     option {
       margin-left: -10px;

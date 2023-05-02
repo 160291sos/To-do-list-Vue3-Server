@@ -1,7 +1,11 @@
 import MyInput from "@/components/UI/MyInput.vue";
-import MyButton from "@/components/UI/MyButton.vue"
+import MyButton from "@/components/UI/MyButton.vue";
+import MyDate from "@/components/UI/MyDate.vue";
+import MySelect from "@/components/UI/MySelect.vue";
 
 export default [
     MyInput,
-    MyButton
+    MyButton,
+    MyDate,
+    MySelect
 ];

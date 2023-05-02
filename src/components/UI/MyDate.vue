@@ -5,10 +5,7 @@
         min="2023-04-01"
         :value="modelValue"
         @input="updateInput">
-     <input v-else type="text"  
-        placeholder="Date... "
-        onfocus="(this.type='date')"
-        onblur="(this.type='text')"
+     <input v-else type="date"  
         min="2023-04-01"
         :value="modelValue"
         @input="updateInput">
@@ -37,9 +34,7 @@ export default {
 input[type="date"]{
     margin-left: -10px;
 }
-input[type="text"]{
-    width: 147px;
-}
+
 ::-webkit-calendar-picker-indicator{
     cursor: pointer;
     padding: 0px;

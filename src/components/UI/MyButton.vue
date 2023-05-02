@@ -16,7 +16,6 @@ export default {
   display: block;
   margin-top: 15px;
   padding: 10px 15px;
-  width: 250px;
   background: none;
   color: teal;
   border: 1px solid teal;
@@ -31,5 +30,9 @@ export default {
     width: 50px;
     border-radius: 50%;
     margin-top: 15px;
+}
+slot{
+    margin: 0px;
+    padding: 0px;
 }
 </style>

@@ -41,14 +41,17 @@ export default {
     display: grid;
     column-gap: 10px;
     align-items: center;
-    border-bottom: 2px solid gray;
-    background: #fff;
+    border-bottom: 2px solid black;
+    background: teal;
+    height: 66px;
 }
 .table-head__name {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    color: #999;
+    color: white;
+    font-weight: 500;
+    font-size: 20px;
     cursor: pointer;
 }
 </style>
