@@ -1,4 +1,7 @@
 <template>
+    <my-dialog  v-if="emptyInput" v-model:show="emptyInput">
+        Your task is empty. Pleas enter your task
+    </my-dialog>
     <base-table 
         :head="tableHeads">
         <table-row
@@ -75,6 +78,7 @@
             priorities: [],
             edit: false,
             editOld: false,
+            emptyInput: false,
             id:'',
             idEditTask: '',
             newPostBody: {
@@ -124,28 +128,33 @@
                 
         },
         saveNewTask(newTask){
-            this.edit=false;
             
-            this.newPostBody.user.id = this.id;
-            this.newPostBody.taskName = newTask.taskName;
-            this.newPostBody.taskPriority = newTask.taskPriority;
-            this.newPostBody.date=newTask.date;
-            console.log(this.newPostBody)
+            
+            if(!newTask.taskName){
+                this.emptyInput=true
+            }else {
+                this.edit=false;
+                this.newPostBody.user.id = this.id;
+                this.newPostBody.taskName = newTask.taskName;
+                this.newPostBody.taskPriority = newTask.taskPriority;
+                this.newPostBody.date=newTask.date;
            
-            axios.post('http://localhost:8089/api/tasks', this.newPostBody)
-                .then((response) => {
-                    axios.get(`http://localhost:8089/api/tasks?userIds=${this.$route.query.id}`)
-                        .then(response => {
-                            this.tasks = response.data;
+                axios.post('http://localhost:8089/api/tasks', this.newPostBody)
+                    .then((response) => {
+                        axios.get(`http://localhost:8089/api/tasks?userIds=${this.$route.query.id}`)
+                            .then(response => {
+                                this.tasks = response.data;
                             
-                            })
-                        .catch((error => {
+                                })
+                            .catch((error => {
+                            console.log(error);
+                            }))
+                    })
+                    .catch((error => {
                         console.log(error);
-                        }))
-                })
-                .catch((error => {
-                    console.log(error);
-                }))
+                    }))
+            }
+            
         },
         saveEditTask(task){
             this.editOld=false;
@@ -199,9 +208,7 @@
   </script>
 
 <style scoped>
-* {
-    margin: auto;
-}
+
 .userBtn{
     border: none;
     padding: 0px;
